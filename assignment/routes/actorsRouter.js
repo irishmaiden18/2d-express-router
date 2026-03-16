@@ -5,36 +5,26 @@ const uuid = require("uuid").v4
 // set up router
 const router = express.Router()
 
-// array of actors
-let actors = [
-  {
-    id: uuid(),
-    name: "Nathan Fielder",
-    age: 42,
-  },
-  {
-    id: uuid(),
-    name: "Emma Stone",
-    age: 36,
-  },
-  {
-    id: uuid(),
-    name: "Aaron Paul",
-    age: 45,
-  },
-  {
-    id: uuid(),
-    name: "Samuel L Jackson",
-    age: 73,
-  },
-]
+// import actors data
+let actors = require("../data/actor-data")
+
+// import our sort function
+const sort = require("../utils")
 
 // handle GET requests
 router.get("/", (request, response) => {
-    // send a response with all the actors as a default
+    // use query parameters
+    // if there is no query parameters, sort by name/asc by default
+    const sortBy = request.query.sortBy || "name"
+    const sortOrder = request.query.sortOrder || "asc"
+
+    // call sort function 
+    const sortedActors = sort(actors, sortBy, sortOrder)
+
+    // send a response with all the musicians as a default
     response.json ({
         message: "success",
-        payload: actors
+        payload: sortedActors
     })
 })
 
@@ -116,6 +106,41 @@ router.put("/:id", (request, response) => {
         })
     }
 })
+
+// handle DELETE requests
+router.delete("/:id", (request, response) => {
+    
+    // figure out whether the actor we want to delete is in our data
+    const actorToDelete = actors.find(actor => actor.id === request.params.id)
+
+    // if the actor we want to delete is in our data
+    if(actorToDelete) {
+
+        // create a results array and fill it with all the actors that are NOT the one we want to delete
+        const results = actors.filter((actor) => {
+            return actorToDelete.id !== actor.id
+        })
+
+        // reassign the actors array to the results array
+        actors = results
+
+        // send a response
+        response.json({
+            message: "success",
+            paylo9ad: {
+                phrase: `${actorToDelete.name} successfully removed`,
+                newList: actors
+            }
+        })
+    } else {
+        // send response
+        response.status(404).json({
+            message: "failure",
+            payload: "Actor to be deleted is not in our list so we CANNOT delete"
+        })
+    }
+})
+
 
 // export the router
 module.exports = router

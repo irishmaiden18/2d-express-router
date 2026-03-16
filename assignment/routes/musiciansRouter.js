@@ -5,36 +5,27 @@ const uuid = require("uuid").v4
 // set up router
 const router = express.Router()
 
-// array of musicians
-let musicians = [
-  {
-    id: uuid(),
-    name: "Carson Pace",
-    age: 29
-  },
-  {
-    id: uuid(),
-    name: "Anthony Green",
-    age: 42
-  },
-  {
-    id: uuid(),
-    name: "Lizzy McAlpine",
-    age: 25
-  },
-  {
-    id: uuid(),
-    name: "Yvette Young",
-    age: 33
-  },
-]
+// import musician data
+let musicians = require("../data/musicians-data")
+
+// import our sort function
+const sort = require("../utils")
 
 // handle GET requests
 router.get("/", (request, response) => {
+
+    // use query parameters
+    // if there is no query parameters, sort by name/asc by default
+    const sortBy = request.query.sortBy || "name"
+    const sortOrder = request.query.sortOrder || "asc"
+
+    // call sort function 
+    const sortedMusicians = sort(musicians, sortBy, sortOrder)
+
     // send a response with all the musicians as a default
     response.json ({
         message: "success",
-        payload: musicians
+        payload: sortedMusicians
     })
 })
 
