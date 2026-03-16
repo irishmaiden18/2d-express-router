@@ -2,6 +2,7 @@
 // npm init -y
 // npm install express morgan
 // npm install uuid
+// npm i lodash
 
 /*
     1. Import express & Morgan, set up app variable
@@ -26,6 +27,9 @@ app.use(express.json())
 // importing router we created in filmsRouter.js
 const filmsRouter = require("./routes/filmsRouter")
 
+// importing router we created in showsRouter.js
+const showsRouter = require("./routes/showsRouter")
+
 /*
     4. Set up the URL routes to connect to each router
 */
@@ -34,7 +38,10 @@ const filmsRouter = require("./routes/filmsRouter")
 // /api/v1/films - more proper name for setting up an API route, tend to start with api, cause that's what it is and then the version and then the name
 // /api/versionNumber/identifier
 // pass in the router it'self as the second parameter
+// the "/api/v1/films" is the prefix to all the routes specified in filmsRouter file
 app.use("/api/v1/films", filmsRouter)
+// the "/api/v1/shows" is the prefix to all the routes specified in showsRouter file
+app.use("/api/v1/shows", showsRouter)
 /*
     5. Set up the port and begin listening
 */
