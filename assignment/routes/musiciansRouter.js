@@ -29,6 +29,34 @@ router.get("/", (request, response) => {
     })
 })
 
+// get an individual musician, GET route with dynamic parameters
+router.get("/:id", (request, response) => {
+    
+    // find the musician we are looking for
+    const foundMusician = musicians.find((musician) => {
+        return musician.id === request.params.id
+    })
+
+    // if the musician we are looking for is in our list
+    if (foundMusician) {
+
+        // send a response
+        response.json({
+            message: "success",
+            payload: foundMusician
+        })
+
+    // else if the musician we are looking for is NOT in our list
+    } else {
+
+        // send a failure response
+        response.status(404).json({
+            message: "failure",
+            payload: "Could not find musician"
+        })
+    }
+})
+
 // handle POST requests
 router.post("/", (request, response) => {
 
