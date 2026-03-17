@@ -141,5 +141,5 @@ Make sure that the ages and names vary enough to test for sorting methods.
 
 
 ### BONUS
-- GET an individual Musician by their ID
+- DONE-- GET an individual Musician by their ID
 - DONE-- GET an indiviual Actor by their ID
