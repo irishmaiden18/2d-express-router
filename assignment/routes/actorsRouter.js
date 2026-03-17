@@ -28,6 +28,32 @@ router.get("/", (request, response) => {
     })
 })
 
+// get an individual actor, GET route with dynamic parameters
+router.get("/:id", (request,response) => {
+
+    // find actor we are looking for
+    const foundActor = actors.find((actor) => {
+        return actor.id === request.params.id
+    })
+
+    // if the actor we are looking for is in our list
+    if(foundActor){
+
+        // send a response
+        response.json({ 
+            message: "success", 
+            payload: foundActor 
+        })
+    // if the actor we are looking for is NOT in our list
+    } else {
+        // send a response
+        res.status(404).json({ 
+            message: "failure", 
+            payload: "Could not find actor" 
+        })
+    }
+})
+
 // handle POST requests
 router.post("/", (request, response) => {
     
@@ -140,7 +166,6 @@ router.delete("/:id", (request, response) => {
         })
     }
 })
-
 
 // export the router
 module.exports = router
